@@ -845,7 +845,10 @@ moves_loop: // When in check and at SpNode search starts from here
       }
 
       // Check for legality just before making the move
-      if (!RootNode && !SpNode && !pos.legal(move, ci.pinned))
+      if (   !RootNode
+          && !SpNode
+          && (ci.pinned || type_of(pos.moved_piece(move)) == KING || type_of(move) == ENPASSANT)
+          && !pos.legal(move, ci.pinned))
       {
           moveCount--;
           continue;
@@ -1182,7 +1185,8 @@ moves_loop: // When in check and at SpNode search starts from here
           continue;
 
       // Check for legality just before making the move
-      if (!pos.legal(move, ci.pinned))
+      if (   (ci.pinned || type_of(pos.moved_piece(move)) == KING || type_of(move) == ENPASSANT)
+          && !pos.legal(move, ci.pinned))
           continue;
 
       ss->currentMove = move;
